@@ -1,0 +1,17 @@
+GET http://localhost:3001/
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "password" : "1"
+}
+
+
+###
+
+GET http://localhost:3001/book/getBook
+Content-Type: application/json
+
+{
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2NjkzMDQ4NTgsImV4cCI6MTY2OTMwNTQ1OH0.RHXtAUJENFBrIZO3-Ze_SWKE4f3urHCBj8PHuxicSwI"
+}
