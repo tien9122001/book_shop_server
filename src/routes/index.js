@@ -4,6 +4,7 @@ const routeBook = require('./Book.route');
 const routeEmployee = require('./Employee.route');
 const routeCustomer = require('./Customer.route');
 const routeUser = require('./User.route');
+const routeCart = require('./Cart.route');
 const { checkLogin } = require('../middlewares/Login.middleware');
 
 function route(app) {
@@ -11,6 +12,7 @@ function route(app) {
     app.use('/employee', checkLogin, routeEmployee);
     app.use('/customer', checkLogin, routeCustomer);
     app.use('/user', routeUser);
+    app.use('/cart', routeCart)
     app.use('/', routeHome);
 }
 
