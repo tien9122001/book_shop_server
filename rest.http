@@ -1,10 +1,29 @@
-GET http://localhost:3001/
+POST http://localhost:3001/user/login
 Content-Type: application/json
 
 {
     "username" : "admin",
-    "password" : "1"
+    "password" : "123"
 }
+
+###
+POST http://localhost:3001/user/logout
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2Njk5MDQ0MjMsImV4cCI6MTY2OTkwNDQzM30.mQrt7221pbCztskUoGn3zOItTeDReXoe-BOurajBxd4"
+}
+
+###
+POST http://localhost:3001/user/refreshToken
+Content-Type: application/json
+
+{
+    "refreshToken" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjY5OTA0MDA5LCJleHAiOjE2NzA3NjgwMDl9.PSNY80c0OFwoSaKkfyZ9Op0eOObYoATkAX_vlABjN0o"
+}
+
+
 
 
 ###
@@ -13,5 +32,5 @@ GET http://localhost:3001/book/getBook
 Content-Type: application/json
 
 {
-    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2NjkzMDQ4NTgsImV4cCI6MTY2OTMwNTQ1OH0.RHXtAUJENFBrIZO3-Ze_SWKE4f3urHCBj8PHuxicSwI"
+    "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2Njk5MDM1NDgsImV4cCI6MTY2OTkwMzU1OH0.BoMdEWv0hFudqWOxlMzRtpVWAHUeUMUgYDE1mrdGE6A"
 }
