@@ -1,5 +1,6 @@
 const newError = require('http-errors');
 const jwt = require('jsonwebtoken');
+const redisClient = require('./redis_client')
 
 
 const secretToken = process.env.SECRETTOKEN;
@@ -9,7 +10,7 @@ const secretRefreshToken = process.env.SECRETREFRESHTOKEN;
 function signToken(payload) {
     return new Promise((resolve, reject) => {
         const options = {
-            expiresIn: '10m',
+            expiresIn: '10s',
         }
         jwt.sign({ payload }, secretToken, options, (err, encode) => {
             console.log({
@@ -39,19 +40,20 @@ function verifyToken(encode) {
 }
 
 
-function signRefreshToken(payload) {
+function signRefreshToken(username) {
     return new Promise((resolve, reject) => {
         const options = {
-            expiresIn: '10m',
+            expiresIn: '10d',
         }
-        jwt.sign({ payload }, secretRefreshToken, options, (err, encode) => {
+        jwt.sign({ username }, secretRefreshToken, options, (err, encode) => {
             console.log({
-                payload,
+                username,
                 secretToken
             });
             if (err) {
                 reject(err);
             }
+            redisClient.set('refToken' + username, encode, { EX: (60 * 10) });   
             resolve(encode);
         });
     })

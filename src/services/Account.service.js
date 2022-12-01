@@ -1,7 +1,8 @@
 const jwt = require('../helpers/jsonwebtoken');
 const newError = require('http-errors');
 const { genBcryptHash, comparePass } = require('../helpers/hash_bcrypt');
-const { getUserByUsername, addUser } = require('../models/Account.model')
+const { getUserByUsername, addUser } = require('../models/User.model');
+const redisClient = require('../helpers/redis_client');
 
 async function verifyUser(user, pass) {
     return new Promise(async (resolve, reject) => {
@@ -21,12 +22,12 @@ async function verifyUser(user, pass) {
 
 
 async function newLogin(data) {
-    return new Promise( async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            const {username, password} = data;
+            const { username, password } = data;
             getUserByUsername(username)
                 .then(({ result }) => {
-                    if(result[0])
+                    if (result[0])
                         reject(newError.Conflict("Username is used!"));
                 })
                 .catch();
@@ -39,7 +40,13 @@ async function newLogin(data) {
     })
 }
 
+
+async function logOut(username) {
+    redisClient.set('refToken' + username, '', { EX: (1) });
+}
+
 module.exports = {
     verifyUser,
-    newLogin
+    newLogin,
+    logOut
 }

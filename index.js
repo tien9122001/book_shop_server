@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const app = express();
 require('dotenv').config();
 const route = require('./src/routes');
+require('./src/helpers/redis_client')
 
 
 const PORT = process.env.PORT || 3000;

@@ -8,8 +8,8 @@ const { checkLogin } = require('../middlewares/Login.middleware');
 
 function route(app) {
     app.use('/book', checkLogin, routeBook);
-    app.use('/employee', routeEmployee);
-    app.use('/customer', routeCustomer);
+    app.use('/employee', checkLogin, routeEmployee);
+    app.use('/customer', checkLogin, routeCustomer);
     app.use('/user', routeUser);
     app.use('/', routeHome);
 }

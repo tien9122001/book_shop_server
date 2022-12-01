@@ -1,6 +1,7 @@
 const newError = require('http-errors');
 const { signToken, verifyToken, signRefreshToken, verifyRefreshToken } = require('../helpers/jsonwebtoken')
-const { verifyUser, newLogin } = require('../services/Account.service')
+const { verifyUser, newLogin, logOut } = require('../services/Account.service')
+const redisClient = require('../helpers/redis_client');
 
 class Account {
     async login(req, res, next) {
@@ -23,9 +24,9 @@ class Account {
     async signUp(req, res, next) {
         try {
             const { username, password } = req.body;
-            await newLogin({username, password});
+            await newLogin({ username, password });
             res.json({
-                message : "Sign Up done!"
+                message: "Sign Up done!"
             })
         } catch (error) {
             next(error);
@@ -34,7 +35,16 @@ class Account {
 
 
     async logOut(req, res, next) {
-
+        try {
+            const { username } = req.body;
+            await logOut(username);
+            res.json({
+                message : "Logout success!"
+            })
+        } catch (error) {
+            next(error);
+        }
+        
     }
 
     async getAccessToken(req, res, next) {
@@ -42,11 +52,17 @@ class Account {
             const { refreshToken } = req.body;
             if (!refreshToken)
                 throw (newError.Unauthorized('RefreshToken is missing!'));
-            const username = await verifyRefreshToken(refreshToken);
-            const token = await signToken(username);
+            const payload = await verifyRefreshToken(refreshToken);
+            console.log({payload});
+            const flag = await redisClient.get('refToken' + payload.username);
+            console.log('flag', flag);
+            if (!flag || (flag != refreshToken)) {
+                throw newError.Unauthorized('RefreshToken is wrong!');
+            }
+            const token = await signToken(payload.username);
             res.json({
                 token,
-                message : "Get new access token success!"
+                message: "Get new access token success!"
             })
         } catch (error) {
             next(error);
