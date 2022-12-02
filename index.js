@@ -20,7 +20,7 @@ route(app);
 app.use('/resource', express.static(path.join(__dirname, 'public')));
 
 app.use((err, req, res, next) => {
-    res.json({
+    res.status(parseInt(err.status)).json({
         "error-message": err.message,
         "status": err.status || 500,
     })
