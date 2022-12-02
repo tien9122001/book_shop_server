@@ -34,3 +34,25 @@ Content-Type: application/json
 {
     "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiYWRtaW4iLCJpYXQiOjE2Njk5MDM1NDgsImV4cCI6MTY2OTkwMzU1OH0.BoMdEWv0hFudqWOxlMzRtpVWAHUeUMUgYDE1mrdGE6A"
 }
+
+
+
+###
+
+POST http://localhost:3001/cart/setCart
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "item" : "pencil",
+    "count" : "10"
+}
+
+
+###
+POST http://localhost:3001/cart/getCart
+Content-Type: application/json
+
+{
+    "username" : "admin"
+}
