@@ -7,8 +7,9 @@ class Account {
     async login(req, res, next) {
         const { username, password } = req.body;
         try {
-            console.log('username:::', {password});
-            if(username) throw newError.BadRequest("Username is missing!")
+            const temp = req.param('username');
+            console.log('username:::', {temp});
+            if(!username) throw newError.BadRequest("Username is missing!")
             await verifyUser(username, password);
             const token = await signToken(username);
             const refreshToken = await signRefreshToken(username);
