@@ -1,4 +1,5 @@
 const jwt = require('../helpers/jsonwebtoken');
+const prismaClient = require('../helpers/prisma_client');
 const newError = require('http-errors');
 const { genBcryptHash, comparePass } = require('../helpers/hash_bcrypt');
 const { getUserByUsername, addUser } = require('../models/User.model');
@@ -7,8 +8,13 @@ const redisClient = require('../helpers/redis_client');
 async function verifyUser(user, pass) {
     return new Promise(async (resolve, reject) => {
         try {
-            const data = await getUserByUsername(user);
-            const { username, password } = data.result[0];
+            const data = await prismaClient.users.findFirst({
+                where : {
+                    username : user
+                }
+            });
+            console.log(data);
+            const { username, password } = data;
             const checkPass = await comparePass(pass, password);
             if (user == username && checkPass) {
                 resolve(true);
