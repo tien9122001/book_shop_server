@@ -8,13 +8,13 @@ const redisClient = require('../helpers/redis_client');
 async function verifyUser(user, pass) {
     return new Promise(async (resolve, reject) => {
         try {
-            const data = await prismaClient.users.findFirst({
+            const result = await prismaClient.users.findFirst({
                 where : {
                     username : user
                 }
             });
-            console.log(data);
-            const { username, password } = data;
+            console.log(result);
+            const { username, password } = result;
             const checkPass = await comparePass(pass, password);
             if (user == username && checkPass) {
                 resolve(true);
@@ -22,6 +22,7 @@ async function verifyUser(user, pass) {
             reject(newError.Unauthorized("Login fail!"));
         } catch (error) {
             reject(newError.Unauthorized('Username is never used!'))
+            // reject(error)
         }
     })
 }
@@ -31,12 +32,13 @@ async function newLogin(data) {
     return new Promise(async (resolve, reject) => {
         try {
             const { username, password } = data;
-            getUserByUsername(username)
-                .then(({ result }) => {
-                    if (result[0])
+            const result = await prismaClient.users.findFirst({
+                where : {
+                    username : user
+                }
+            });
+            if (result)
                         reject(newError.Conflict("Username is used!"));
-                })
-                .catch();
             const hashPass = await genBcryptHash(password);
             await addUser({ username, hashPass });
             resolve(true);
